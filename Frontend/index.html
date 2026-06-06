@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KhelX - Esports Tournament Management</title>
+<link rel="stylesheet" href="CSS/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="icon" type="image" href="images/logo.png">
+<style>
+    .tournament-bracket {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        margin: 1rem 0;
+    }
+    .tournament-bracket .bracket-line {
+        flex: 1;
+        height: 1px;
+        background: rgba(255,255,255,0.18);
+    }
+    .tournament-bracket .trophy-center {
+        color: #ffd700;
+        font-size: 1rem;
+        background: rgba(255,255,255,0.08);
+        border-radius: 50%;
+        width: 2.2rem;
+        height: 2.2rem;
+        display: grid;
+        place-items: center;
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+    .tournament-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        justify-content: center;
+        margin-top: 1rem;
+    }
+    .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 2200;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0,0,0,0.72);
+        padding: 1rem;
+    }
+    .modal.active {
+        display: flex;
+    }
+    .modal-backdrop {
+        position: absolute;
+        inset: 0;
+    }
+    .modal-panel {
+        position: relative;
+        z-index: 1;
+        width: min(100%, 640px);
+        max-height: 85vh;
+        overflow: auto;
+        background: #111;
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 1rem;
+        box-shadow: 0 30px 80px rgba(0,0,0,0.55);
+        padding: 1.25rem;
+    }
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+    .modal-header h2 {
+        margin: 0;
+        font-size: 1.2rem;
+        color: #f9f871;
+    }
+    .modal-close {
+        background: none;
+        border: none;
+        color: #ddd;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+    .modal-body {
+        color: #e5e5e5;
+        line-height: 1.7;
+    }
+    .modal-body h3 {
+        margin: 1rem 0 0.5rem;
+        font-size: 0.95rem;
+        color: #f3f3f3;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+    .modal-body ul {
+        padding-left: 1.1rem;
+        margin: 0.5rem 0 0;
+    }
+    .modal-body li {
+        margin-bottom: 0.7rem;
+    }
+    .modal-footer {
+        margin-top: 1.25rem;
+        display: flex;
+        justify-content: flex-end;
+    }
+</style>
+</head>
+<body>
+
+<!-- ─── STICKY NAV ─── -->
+<nav id="navbar">
+    <a href="#home" class="nav-logo"><img src="images/logo.png" alt="KhelX"></a>
+    <div class="nav-links" id="navLinks">
+        <ul>
+            <li><a href="#home" class="active">Home</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#tournaments">Tournaments</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="login.html" class="nav-login"><i class="fas fa-user"></i> Login</a></li>
+        </ul>
+    </div>
+    <div class="menu-toggle" id="menuToggle">
+        <span></span><span></span><span></span>
+    </div>
+</nav>
+<div class="nav-backdrop" id="navBackdrop"></div>
+
+<!-- ─── HERO ─── -->
+<section id="home" class="hero">
+    <div class="hero-content">
+        <h1>Welcome to <span class="accent">KhelX</span> Esports Arena</h1>
+        <p>Compete, connect, and conquer. KhelX is your all-in-one platform for organizing and joining esports tournaments — from registration to live brackets and prize distribution.</p>
+        <div class="hero-actions">
+            <a href="login.html" class="btn">Join a Tournament</a>
+            <a href="#tournaments" class="btn btn-outline">Browse Tournaments</a>
+        </div>
+        <div class="hero-stats">
+            <div><strong>10,000+</strong><span>Active Players</span></div>
+            <div><strong>200+</strong><span>Tournaments Hosted</span></div>
+            <div><strong>₹50L+</strong><span>Prize Pools</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- ─── ABOUT US ─── -->
+<section id="about" class="section">
+    <div class="container">
+        <div class="section-header">
+            <h2>About <span class="accent">KhelX</span></h2>
+            <p>KhelX empowers gamers and organizers with seamless tournament management — built for competitive mobile and PC esports.</p>
+        </div>
+        <div class="grid grid-3">
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-trophy"></i></div>
+                <h3>Tournament Hosting</h3>
+                <p>Create and manage brackets, schedules, and rules for any game — from casual scrims to championship events.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-users"></i></div>
+                <h3>Team Registration</h3>
+                <p>Easy sign-up for solo players and squads. Automated slot booking, waitlists, and team verification.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+                <h3>Live Leaderboards</h3>
+                <p>Real-time scores, standings, and match results updated instantly across all active tournaments.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-gamepad"></i></div>
+                <h3>Multi-Game Support</h3>
+                <p>Free Fire, eFootball, PUBG Mobile, and more — one platform for all your favourite competitive titles.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-wallet"></i></div>
+                <h3>Prize Distribution</h3>
+                <p>Transparent prize pool tracking and automated payouts to winners after tournament completion.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-mobile-screen"></i></div>
+                <h3>Mobile-First</h3>
+                <p>Register, check schedules, and view results on the go — optimized for mobile gamers everywhere.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ─── FEATURED GAMES ─── -->
+<section class="section section-alt">
+    <div class="container">
+        <div class="section-header">
+            <h2>Supported Games</h2>
+            <p>Compete in the most popular mobile and esports titles on KhelX.</p>
+        </div>
+        <div class="grid grid-4">
+            <div class="img-card">
+                <img src="images/cardio.jpg" alt="Free Fire">
+                <div class="img-overlay"><h3>Free Fire</h3></div>
+            </div>
+            <div class="img-card">
+                <img src="images/freeweight.jpg" alt="eFootball Mobile">
+                <div class="img-overlay"><h3>eFootball Mobile</h3></div>
+            </div>
+            <div class="img-card">
+                <img src="images/functional.png" alt="PUBG Mobile">
+                <div class="img-overlay"><h3>PUBG Mobile</h3></div>
+            </div>
+            <div class="img-card">
+                <img src="images/gym studio.jpg" alt="Clash Squad">
+                <div class="img-overlay"><h3>Clash Squad</h3></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ─── TOURNAMENTS ─── -->
+<section id="tournaments" class="section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Active <span class="accent">Tournaments</span></h2>
+            <p>Register now and compete for glory and prize pools across top esports titles.</p>
+        </div>
+        <div class="tournament-grid">
+            <div class="tournament-card">
+                <div class="tournament-img">
+                    <img src="https://tse3.mm.bing.net/th/id/OIP.-Gcrd3w5xGjX4Aw4gp7mXgHaEK?w=294&h=180&c=7&r=0&o=7&pid=1.7&rm=3" alt="Free Fire Full Map">
+                    <div class="tournament-badge">Free Fire</div>
+                </div>
+                <div class="tournament-body">
+                    <div class="tournament-top">
+                        <div>
+                            <h3>Free Fire Full Map</h3>
+                            <span class="tournament-mode">Battle Royale · Squad</span>
+                        </div>
+                        <div class="tournament-prize"><i class="fas fa-trophy"></i> ₹25,000</div>
+                    </div>
+                    <p>Classic 4-player squad battle royale on Bermuda map. Last team standing takes the crown and prize pool.</p>
+                    <div class="tag-row">
+                        <span>4v4 Squad</span><span>Full Map</span><span>BO3</span>
+                    </div>
+                    <div class="tournament-bracket">
+                        <span class="bracket-line"></span>
+                        <span class="trophy-center"><i class="fas fa-trophy"></i></span>
+                        <span class="bracket-line"></span>
+                    </div>
+                    <div class="tournament-actions">
+                        <a href="login.html?from=register" class="btn btn-full btn-sm">
+                            <i class="fas fa-gamepad"></i> Register Now
+                        </a>
+                        <button class="btn btn-outline btn-sm" onclick="openRulesModal('Free Fire Full Map')">
+                            <i class="fas fa-book"></i> Rules
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tournament-card">
+                <div class="tournament-img">
+                    <img src="https://th.bing.com/th/id/OIP.Tah8TCNqS5mg20GxSM5RfQHaEK?w=322&h=181&c=7&r=0&o=7&pid=1.7&rm=3" alt="Free Fire Clash Squad 4v4">
+                    <div class="tournament-badge">Clash Squad</div>
+                </div>
+                <div class="tournament-body">
+                    <div class="tournament-top">
+                        <div>
+                            <h3>Free Fire Clash Squad 4v4</h3>
+                            <span class="tournament-mode">Clash Squad · 4v4</span>
+                        </div>
+                        <div class="tournament-prize"><i class="fas fa-trophy"></i> ₹15,000</div>
+                    </div>
+                    <p>Fast-paced 4v4 Clash Squad mode. Outplay opponents in round-based matches and climb the bracket.</p>
+                    <div class="tag-row">
+                        <span>4v4</span><span>Clash Squad</span><span>Single Elim</span>
+                    </div>
+                    <div class="tournament-bracket">
+                        <span class="bracket-line"></span>
+                        <span class="trophy-center"><i class="fas fa-trophy"></i></span>
+                        <span class="bracket-line"></span>
+                    </div>
+                    <div class="tournament-actions">
+                        <a href="login.html?from=register" class="btn btn-full btn-sm">
+                            <i class="fas fa-gamepad"></i> Register Now
+                        </a>
+                        <button class="btn btn-outline btn-sm" onclick="openRulesModal('Free Fire Clash Squad 4v4')">
+                            <i class="fas fa-book"></i> Rules
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tournament-card">
+                <div class="tournament-img">
+                    <img src="https://image.api.playstation.com/vulcan/ap/rnd/202507/1706/0fb12c181c8e323e6cd6181b0602d31659065eac5308c1c7.jpg" alt="eFootball Mobile">
+                    <div class="tournament-badge">eFootball</div>
+                </div>
+                <div class="tournament-body">
+                    <div class="tournament-top">
+                        <div>
+                            <h3>eFootball Mobile</h3>
+                            <span class="tournament-mode">1v1 · Ranked</span>
+                        </div>
+                        <div class="tournament-prize"><i class="fas fa-trophy"></i> ₹10,000</div>
+                    </div>
+                    <p>1v1 knockout tournament on eFootball Mobile. Show your skills on the pitch and claim the championship.</p>
+                    <div class="tag-row">
+                        <span>1v1</span><span>Knockout</span><span>Mobile</span>
+                    </div>
+                    <div class="tournament-bracket">
+                        <span class="bracket-line"></span>
+                        <span class="trophy-center"><i class="fas fa-trophy"></i></span>
+                        <span class="bracket-line"></span>
+                    </div>
+                    <div class="tournament-actions">
+                        <a href="login.html?from=register" class="btn btn-full btn-sm">
+                            <i class="fas fa-gamepad"></i> Register Now
+                        </a>
+                        <button class="btn btn-outline btn-sm" onclick="openRulesModal('eFootball Mobile')">
+                            <i class="fas fa-book"></i> Rules
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ─── TESTIMONIALS ─── -->
+<section class="section section-alt">
+    <div class="container">
+        <div class="section-header">
+            <h2>What Players Say</h2>
+            <p>Real stories from gamers who compete and win on KhelX.</p>
+        </div>
+        <div class="grid grid-2">
+            <div class="testimonial">
+                <img src="images/mike-tyson.jpg" alt="Rahul Sharma">
+                <div class="testimonial-content">
+                    <p>"Won my first Free Fire tournament on KhelX! Smooth registration and fair bracket system. Best platform for mobile esports."</p>
+                    <h4>Rahul Sharma</h4>
+                    <div class="stars">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial">
+                <img src="images/sarah.jpg" alt="Priya Patel">
+                <div class="testimonial-content">
+                    <p>"Organized a Clash Squad event for our college — KhelX made everything easy from sign-ups to prize payouts. Highly recommend!"</p>
+                    <h4>Priya Patel</h4>
+                    <div class="stars">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ─── GALLERY ─── -->
+<section id="gallery" class="section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Tournament Highlights</h2>
+            <p>Moments from past KhelX esports events.</p>
+        </div>
+        <div class="grid grid-4">
+            <div class="img-card">
+                <img src="images/modern.jpg" alt="Championship Finals">
+                <div class="img-overlay"><h3>Championship Finals</h3></div>
+            </div>
+            <div class="img-card">
+                <img src="images/live classes.jpg" alt="Live Matches">
+                <div class="img-overlay"><h3>Live Matches</h3></div>
+            </div>
+            <div class="img-card">
+                <img src="images/campaing.png" alt="Prize Ceremony">
+                <div class="img-overlay"><h3>Prize Ceremony</h3></div>
+            </div>
+            <div class="img-card">
+                <img src="images/personal training.png" alt="Team Registration">
+                <div class="img-overlay"><h3>Team Registration</h3></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ─── CONTACT ─── -->
+<section id="contact" class="section section-alt">
+    <div class="container">
+        <div class="section-header">
+            <h2>Get In Touch</h2>
+            <p>Have questions about tournaments or want to host an event? Reach out to us.</p>
+        </div>
+<div class="contact-form-container">
+    <form class="contact-form" id="contactForm" novalidate>
+        <div class="form-row">
+            <div class="form-group">
+                <label><i class="fas fa-user"></i> Name</label>
+                <input type="text" name="name" autocomplete="name" placeholder="Your full name" maxlength="200" required>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-envelope"></i> Email</label>
+                <input type="email" name="email" autocomplete="email" placeholder="your@email.com" maxlength="254" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label><i class="fas fa-phone"></i> Phone</label>
+            <input type="tel" name="phone" autocomplete="tel" maxlength="60" placeholder="Your phone number (optional)">
+        </div>
+        <div class="form-group">
+            <label><i class="fas fa-message"></i> Message</label>
+            <textarea name="message" rows="5" maxlength="5000" placeholder="Tell us about your tournament or inquiry..." required></textarea>
+        </div>
+        <div id="contactFormFeedback" class="contact-form-feedback" role="status" aria-live="polite"></div>
+        <button type="submit" class="btn btn-full" style="width:auto; margin-top:16px; padding-top: 12px;" id="contactFormSubmit">
+            <i class="fas fa-paper-plane"></i> Send Message
+        </button>
+    </form>
+</div>
+    </div>
+</section>
+
+
+<!-- ─── FOOTER ─── -->
+<footer>
+    <div class="container footer-inner">
+        <div class="footer-brand">
+            <img src="images/logo.png" alt="KhelX" width="50">
+            <span>KhelX Esports</span>
+        </div>
+        <div class="footer-links">
+            <a href="#home">Home</a>
+            <a href="#about">About Us</a>
+            <a href="#tournaments">Tournaments</a>
+            <a href="#contact">Contact</a>
+        </div>
+        <p>&copy; 2026 KhelX Esports. All rights reserved. | <a href="login.html">Player Dashboard</a></p>
+    </div>
+</footer>
+
+<script>
+(function() {
+    var navLinks  = document.getElementById('navLinks');
+    var menuBtn   = document.getElementById('menuToggle');
+    var navbar    = document.getElementById('navbar');
+    var anchors   = document.querySelectorAll('.nav-links ul li a');
+    var sections  = document.querySelectorAll('section[id]');
+
+    menuBtn.addEventListener('click', function() {
+        navLinks.classList.toggle('open');
+        menuBtn.classList.toggle('open');
+    });
+
+    anchors.forEach(function(a) {
+        a.addEventListener('click', function() {
+            navLinks.classList.remove('open');
+            menuBtn.classList.remove('open');
+        });
+    });
+
+    var spy = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+            if (e.isIntersecting) {
+                anchors.forEach(function(a) {
+                    a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id);
+                });
+            }
+        });
+    }, { rootMargin: '-30% 0px -65% 0px' });
+
+    sections.forEach(function(s) { spy.observe(s); });
+
+    window.addEventListener('scroll', function() {
+        navbar.classList.toggle('scrolled', window.scrollY > 60);
+    });
+})();
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script type="module" src="js/contact-form.js"></script>
+</body>
+</html>
+
+<div class="modal" id="rulesModal" aria-hidden="true">
+  <div class="modal-backdrop" onclick="closeRulesModal()"></div>
+  <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="rulesModalTitle">
+    <div class="modal-header">
+      <h2 id="rulesModalTitle">Tournament Rules</h2>
+      <button class="modal-close" onclick="closeRulesModal()" aria-label="Close modal">&times;</button>
+    </div>
+    <div class="modal-body" id="rulesModalBody"></div>
+    <div class="modal-footer">
+      <button class="btn btn-full btn-sm" onclick="closeRulesModal()">Close</button>
+    </div>
+  </div>
+</div>
